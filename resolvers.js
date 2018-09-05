@@ -1,4 +1,12 @@
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
+
+const createToken = (user, secret, expiresIn) => {
+    const { username, email } = user;
+    return jwt.sign({ username, email }, secret, { expiresIn })
+}
+
 module.exports = {
     Query: {
         getPosts: async (_, args, { Post }) => {
@@ -29,7 +37,7 @@ module.exports = {
             if (!isValidPassword) {
                 throw new Error('Username or password is incorrect')
             }
-            return user;
+            return { token: createToken(user, process.env.secret, '1hr') };
         },
         signupUser: async (_, { username, email, password }, { User }) => {
             const user = await User.findOne({ username })
@@ -41,7 +49,7 @@ module.exports = {
                 email,
                 password
             }).save();
-            return newUser
+            return { token: createToken(newUser, process.env.secret, '1hr') };
         }
     }
 }
