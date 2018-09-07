@@ -15,7 +15,7 @@
             {{item.title}}
           </v-list-tile-content>
         </v-list-tile>
-        <v-list-tile v-if="user">
+        <v-list-tile v-if="user" @click="handleSignOut">
           <v-list-tile-action>
             <v-icon>exit_to_app</v-icon>
           </v-list-tile-action>
@@ -47,7 +47,7 @@
             Profile
           </v-badge>
         </v-btn>
-        <v-btn flat v-if="user">
+        <v-btn flat v-if="user" @click="handleSignOut">
           <v-icon class="hidden-sm-only" left>exit_to_app</v-icon>
           Signout
         </v-btn>
@@ -74,6 +74,9 @@ export default {
     };
   },
   methods: {
+    handleSignOut() {
+      this.$store.dispatch("signoutUser");
+    },
     toggleSideNav() {
       this.sideNav = !this.sideNav;
     }
