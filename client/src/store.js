@@ -58,6 +58,8 @@ export default new Vuex.Store({
         })
     },
     signinUser: ({ commit }, payload) => {
+      //the below line is to set the token to an empty string before signin muatation to prevent any errors
+      localStorage.setItem('token', "")
       apolloClient.mutate({
         mutation: SIGNIN_USER,
         variables: payload
