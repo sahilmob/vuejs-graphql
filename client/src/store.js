@@ -2,7 +2,12 @@ import Vue from "vue";
 import Vuex from "vuex";
 import router from "./router";
 import { defaultClient as apolloClient } from "./main";
-import { GET_CURRENT_USER, GET_POSTS, SIGNIN_USER } from "./queries";
+import {
+	GET_CURRENT_USER,
+	GET_POSTS,
+	SIGNIN_USER,
+	SIGNUP_USER
+} from "./queries";
 
 Vue.use(Vuex);
 
@@ -84,6 +89,26 @@ export default new Vuex.Store({
 				.then(({ data }) => {
 					commit("setLoading", false);
 					localStorage.setItem("token", data.signinUser.token);
+					router.go();
+				})
+				.catch(err => {
+					commit("setLoading", false);
+					commit("setError", err);
+				});
+		},
+		signupUser: ({ commit }, payload) => {
+			commit("clearError");
+			commit("setLoading", true);
+
+			apolloClient
+				.mutate({
+					mutation: SIGNUP_USER,
+					variables: payload
+				})
+				.then(({ data }) => {
+					commit("setLoading", false);
+					localStorage.setItem("token", data.signupUser.token);
+					//to make sure created method is run in main.js (and alse we ran getCurrentUser), refresh the page by using router.go()
 					router.go();
 				})
 				.catch(err => {
