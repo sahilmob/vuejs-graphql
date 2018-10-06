@@ -30,7 +30,9 @@
                             </v-layout>
                             <v-layout row>
                                 <v-flex xs12>
-                                    <v-btn color="primary" type="submit">Signin</v-btn>
+                                    <v-btn :loading="loading" color="primary" type="submit" :disabled="loading" @click.native="loader = 'loading'">
+                                        Signin
+                                        </v-btn>
                                     <h3>
                                         Don't have an account?
                                         <router-link to="/signup">Signup</router-link>
@@ -56,7 +58,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters(["user", "error"])
+    ...mapGetters(["user", "error", "loading"])
   },
   watch: {
     user(value) {
@@ -77,4 +79,40 @@ export default {
 </script>
 
 <style>
+.custom-loader {
+	animation: loader 1s infinite;
+	display: flex;
+}
+@-moz-keyframes loader {
+	from {
+		transform: rotate(0);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+@-webkit-keyframes loader {
+	from {
+		transform: rotate(0);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+@-o-keyframes loader {
+	from {
+		transform: rotate(0);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
+@keyframes loader {
+	from {
+		transform: rotate(0);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+}
 </style>

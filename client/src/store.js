@@ -67,8 +67,10 @@ export default new Vuex.Store({
 				});
 		},
 		signinUser: ({ commit }, payload) => {
-			//the below line is to set the token to an empty string before signin muatation to prevent any errors
+			//the below line is to set the token to an empty string before signin muatation to prevent any errors(if malformed token)
 			commit("clearError");
+			commit("setLoading", true);
+
 			localStorage.setItem("token", "");
 			apolloClient
 				.mutate({
@@ -76,10 +78,12 @@ export default new Vuex.Store({
 					variables: payload
 				})
 				.then(({ data }) => {
+					commit("setLoading", false);
 					localStorage.setItem("token", data.signinUser.token);
 					router.go();
 				})
 				.catch(err => {
+					commit("setLoading", false);
 					commit("setError", err);
 				});
 		},
