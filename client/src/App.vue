@@ -58,6 +58,12 @@
         <transition name="fade">
           <router-view/>
         </transition>
+          <!-- Auth Snackbar -->
+          <v-snackbar v-model="authSnackBar" color="success" :timeout="5000" bottom left>
+            <v-icon class="mr-3">check-circle</v-icon>
+            <h3>You are now signed in!</h3>
+            <v-btn dark flat @click="authSnackBar = false">Dismiss</v-btn>
+          </v-snackbar>
       </v-container>
     </main>
   </v-app>
@@ -70,8 +76,18 @@ export default {
   name: "App",
   data() {
     return {
-      sideNav: false
+      sideNav: false,
+      authSnackBar: false
     };
+  },
+  watch: {
+    user(newValue, oldValue){
+      // if we had no user before, show snak bar
+      console.log(oldValue)
+      if (oldValue === null){
+        this.authSnackBar = true;
+      }
+    }
   },
   methods: {
     handleSignOut() {
@@ -158,21 +174,21 @@ export default {
 
 <style>
 i {
-  margin-right: 10px;
+	margin-right: 10px;
 }
 
 .fade-enter-active,
 .fade-leave-active {
-  transition-property: all;
-  transition-duration: 0.25s;
+	transition-property: all;
+	transition-duration: 0.25s;
 }
 .fade-enter-active {
-  transition-delay: 0.25s;
+	transition-delay: 0.25s;
 }
 
 .fade-enter,
 .fade-leave-active {
-  opacity: 0;
-  transform: translateY(-25px);
+	opacity: 0;
+	transform: translateY(-25px);
 }
 </style>
