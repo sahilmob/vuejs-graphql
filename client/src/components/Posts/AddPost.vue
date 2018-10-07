@@ -29,7 +29,7 @@
                     <!-- Category Select -->
                     <v-layout row>
                         <v-flex xs12>
-                            <v-select :rules="categoriesRules" v-model="categories" :items="['Art', 'Education', 'travel', 'Photography', 'Technology']" multiple label="Categories" />
+                            <v-select :rules="categoriesRules" v-model="categories" :items="['Art', 'Education','Food','Furniture' ,'Travel', 'Photography', 'Technology']" multiple label="Categories" />
                         </v-flex>
                     </v-layout>
                     <!-- Descripton -->
