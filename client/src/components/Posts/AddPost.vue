@@ -7,17 +7,17 @@
         </v-layout>
         <v-layout row wrap="">
             <v-flex xs12 sm6 offset-sm3>
-                <v-form v-model="isFormValid" lazy-validation ref="form" @submit.prevent="handleAddPost">
+                <v-form ref="form" v-model="isFormValid" lazy-validation @submit.prevent="handleAddPost">
                     <!-- Title input -->
                     <v-layout row>
                         <v-flex xs12>
-                            <v-text-field :rules="titleRules" v-model="title" label="Post Title" type="text" required></v-text-field>
+                            <v-text-field :rules="titleRules" v-model="title" label="Post Title" type="text" required />
                         </v-flex>
                     </v-layout>
                     <!-- Image url -->
                     <v-layout row>
                         <v-flex xs12>
-                            <v-text-field :rules="imageRules" v-model="imageUrl" label="Image Url" type="text" required></v-text-field>
+                            <v-text-field :rules="imageRules" v-model="imageUrl" label="Image Url" type="text" required />
                         </v-flex>
                     </v-layout>
                     <!-- Image Preview -->
@@ -29,18 +29,18 @@
                     <!-- Category Select -->
                     <v-layout row>
                         <v-flex xs12>
-                            <v-select :rules="categoriesRules" v-model="categories" :items="['Art', 'Education', 'travel', 'Photography', 'Technology']" multiple label="Categories"></v-select>
+                            <v-select :rules="categoriesRules" v-model="categories" :items="['Art', 'Education', 'travel', 'Photography', 'Technology']" multiple label="Categories" />
                         </v-flex>
                     </v-layout>
                     <!-- Descripton -->
                     <v-layout row>
                         <v-flex xs12>
-                            <v-textarea :rules="descRules" v-model="description" label="Description"></v-textarea>
+                            <v-textarea :rules="descRules" v-model="description" label="Description" />
                         </v-flex>
                     </v-layout>
                     <v-layout row>
                         <v-flex xs12>
-                            <v-btn :loading="loading" color="info" type="submit" :disabled="loading || !isFormValid" @click.native="loader = 'loading'">Submit</v-btn>
+                            <v-btn :loading="loading" :disabled="loading || !isFormValid" color="info" type="submit" @click.native="loader = 'loading'">Submit</v-btn>
                         </v-flex>
                     </v-layout>
                 </v-form>
@@ -51,7 +51,7 @@
 
 <script>
 export default {
-  name: "Add Post",
+  name: "AddPost",
   data(){
       return{
           isFormValid: true,
@@ -63,10 +63,7 @@ export default {
               title => !! title || "Title is required",
               title => title.length <= 20 || "Title must have less than 20 characters"
           ],
-          titleRules: [
-              title => !! title || "Title is required"
-          ],
-          timageRules: [
+          imageRules: [
               image => !! image || "Image is required"
           ],
           categoriesRules: [
