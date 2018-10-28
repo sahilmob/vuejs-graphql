@@ -13,7 +13,7 @@ export const GET_POSTS = gql`
 
 export const INFINITE_SCROLL_POSTS = gql`
 	query($pageNum: Int!, $pageSize: Int!) {
-		infiniteScrollPosts(pagenum: $pageNum, pageSize: $pageSize) {
+		infiniteScrollPosts(pageNum: $pageNum, pageSize: $pageSize) {
 			hasMore
 			posts {
 				_id
@@ -23,7 +23,7 @@ export const INFINITE_SCROLL_POSTS = gql`
 				description
 				likes
 				createdDate
-				message {
+				messages {
 					_id
 				}
 				createdBy {

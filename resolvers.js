@@ -32,28 +32,28 @@ module.exports = {
 		infiniteScrollPosts: async (_, { pageNum, pageSize }, { Post }) => {
 			let posts;
 			if (pageNum === 1) {
-				posts = await Posts.find({})
+				posts = await Post.find({})
 					.sort({ createdDate: "desc" })
-					.poputale({
+					.populate({
 						path: "createdBy",
 						model: "User"
 					})
-					.limit({ pageSize });
+					.limit(pageSize);
 			} else {
 				// If page number is grater than one, figure out how many documents to skip
 				const skips = pageSize * (pageNum - 1);
 				posts = await Post.find({})
 					.sort({ createdDate: "desc" })
-					.poputale({
+					.populate({
 						path: "createdBy",
 						model: "User"
 					})
 					.skip(skips)
 					.limit(pageSize);
-				const totalDocs = await Post.countDocuments();
-				const hasMore = totalDocs > pageSize * pageNum;
-				return { posts, hasMore };
 			}
+			const totalDocs = await Post.countDocuments();
+			const hasMore = totalDocs > pageSize * pageNum;
+			return { posts, hasMore };
 		}
 	},
 	Mutation: {
