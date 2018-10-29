@@ -7,8 +7,8 @@
             <h1>
               {{getPost.title}}
             </h1>
-            <v-btn @click="handleUnlikePost" large icon v-if="user">
-              <v-icon large color="grey">
+            <v-btn @click="handleToggleLike" large icon v-if="user">
+              <v-icon large :color="checkIfPostLiked(this.postId) ? 'red' : 'grey'">
                 favorite
               </v-icon>
             </v-btn>
@@ -97,6 +97,7 @@ export default {
   props: ['postId'],
   data() {
     return{
+      postLiked: false,
       dialog: false,
       messageBody: "",
       isFormValid: true,
@@ -104,10 +105,18 @@ export default {
         message => !!message || "Message is required",
         message => message.length < 100 || "Message must be less than 100 characters"
         ]
-      
     }
   },
   methods: {
+    checkIfPostLiked(postId){
+      if (this.userFavorites && this.userFavorites.some(fave => fave._id === postId)){
+        this.postLiked = true
+        return true
+      }else{
+        this.postLiked = false
+        return false
+      }
+    },
     handleAddPostMessage(){
       if (this.$refs.form.validate()){
       const variables = {
@@ -135,7 +144,7 @@ export default {
       }).then(({data}) =>{
         // it could be this.messageBody = '' but since it is a form, iw wil be invalid after changing messageBody to empty string, so we must reset the form by the following
         this.$refs.form.reset()
-        console.log(data.addPostMessage)
+        // console.log(data.addPostMessage)
       }).catch(err=>{
         console.log(err)
       })
@@ -172,7 +181,7 @@ export default {
             data
           })
         }
-      }).then(({then})=>{
+      }).then(({data})=>{
         // console.log('user', this.user)
         // console.log("like post", data.likePost)
         const updatedUser = {...this.user, favorites: data.likePost.favorites};
@@ -201,7 +210,7 @@ export default {
             data
           })
         }
-      }).then(({then})=>{
+      }).then(({data})=>{
         // console.log('user', this.user)
         // console.log("like post", data.likePost)
         const updatedUser = {...this.user, favorites: data.unlikePost.favorites};
@@ -209,6 +218,15 @@ export default {
       }).catch(err =>{
         console.log(err)
       })
+    },
+    handleToggleLike(){
+      if (this.postLiked){
+        this.handleUnlikePost();
+        this.checkIfPostLiked(this.postId)
+      }else{
+        this.handleLikePost();
+        this.checkIfPostLiked(this.postId)
+      }
     }
   },
   apollo: {
@@ -222,7 +240,7 @@ export default {
     }
   },
   computed:{
-    ...mapGetters(['user'])
+    ...mapGetters(['user', 'userFavorites'])
   }
 }
 </script>

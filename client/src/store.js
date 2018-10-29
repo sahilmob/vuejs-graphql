@@ -171,6 +171,9 @@ export default new Vuex.Store({
 		user: state => {
 			return state.user;
 		},
+		userFavorites: state => {
+			return state.user && state.user.favorites;
+		},
 		error: state => {
 			return state.error;
 		},
