@@ -44,10 +44,10 @@
     <div class="mt-3">
       <v-layout class="mb-3" v-if="user">
         <v-flex xs12>
-          <v-form>
+          <v-form @submit.prevent="handleAddPostMessage">
             <v-layout row>
               <v-flex xs12>
-                <v-text-field clearable append-outer-icon="send" label="Add Message" type="text" prepend-icon="email" requierd>
+                <v-text-field v-model="messageBody" @click:append-outer="handleAddPostMessage" clearable :append-outer-icon="messageBody && 'send'" label="Add Message" type="text" prepend-icon="email" requierd>
                 </v-text-field>
               </v-flex>
             </v-layout>
@@ -60,7 +60,7 @@
         <v-flex xs12>
           <v-list subheader two-line>
             <v-subheader>Messages ({{getPost.messages.length}})</v-subheader>
-            <template v-for="message in getPost.message">
+            <template v-for="message in getPost.messages">
               <v-divider :key="message._id"></v-divider>
               <v-list-tile avatar inset :key="message.title">
                 <v-list-tile-avatar>
@@ -91,16 +91,46 @@
 
 <script>
 import {mapGetters} from 'vuex'
-import {GET_POST} from '../../queries'
+import {GET_POST, ADD_POST_MESSAGE, GET_POSTS} from '../../queries'
 export default {
   name: "Post",
   props: ['postId'],
   data() {
     return{
-      dialog: false
+      dialog: false,
+      messageBody: ""
     }
   },
   methods: {
+    handleAddPostMessage(){
+      const variables = {
+        messageBody: this.messageBody,
+        userId : this.user._id,
+        postId: this.postId
+      }
+      this.$apollo.mutate({
+        mutation: ADD_POST_MESSAGE,
+        variables,
+        update: (cache, {data: {addPostMessage}})=>{
+          const data= cache.readQuery({
+            query: GET_POST,
+            variables:{
+              postId: this.postId
+        }
+          })
+          data.getPost.messages.unshift(addPostMessage)
+          cache.writeQuery({
+            query: GET_POST,
+            variables: {postId: this.postId},
+            data
+          })
+        }
+      }).then(({data}) =>{
+        console.log(data.addPostMessage)
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
     goToPreviousPage(){
       this.$router.go(-1);
     },
