@@ -42,8 +42,8 @@
         </v-btn>
         <v-btn flat to="/profile" v-if="user">
           <v-icon class="hidden-sm-only" left>account_box</v-icon>
-          <v-badge right color="blue darken-2">
-            <span slot="badge">1</span>
+          <v-badge right color="blue darken-2" :class="{'bounce': badgeAnimated}">
+            <span slot="badge" v-if="userFavorites.length">{{userFavorites.length}}</span>
             Profile
           </v-badge>
         </v-btn>
@@ -56,20 +56,20 @@
     <main>
       <v-container class="mt-4">
         <transition name="fade">
-          <router-view/>
+          <router-view />
         </transition>
-          <!-- Auth Snackbar -->
-          <v-snackbar v-model="authSnackBar" color="success" :timeout="5000" bottom left>
-            <v-icon class="mr-3">check-circle</v-icon>
-            <h3>You are now signed in!</h3>
-            <v-btn dark flat @click="authSnackBar = false">Dismiss</v-btn>
-          </v-snackbar>
-          <!-- Auth Error Snackbar -->
-          <v-snackbar v-if="authError" v-model="authErrorSnackBar" color="info" :timeout="5000" bottom left>
-            <v-icon class="mr-3">cancel</v-icon>
-            <h3>{{authError.message}}</h3>
-            <v-btn dark flat to="/signin">Sign in</v-btn>
-          </v-snackbar>
+        <!-- Auth Snackbar -->
+        <v-snackbar v-model="authSnackBar" color="success" :timeout="5000" bottom left>
+          <v-icon class="mr-3">check-circle</v-icon>
+          <h3>You are now signed in!</h3>
+          <v-btn dark flat @click="authSnackBar = false">Dismiss</v-btn>
+        </v-snackbar>
+        <!-- Auth Error Snackbar -->
+        <v-snackbar v-if="authError" v-model="authErrorSnackBar" color="info" :timeout="5000" bottom left>
+          <v-icon class="mr-3">cancel</v-icon>
+          <h3>{{authError.message}}</h3>
+          <v-btn dark flat to="/signin">Sign in</v-btn>
+        </v-snackbar>
 
       </v-container>
     </main>
@@ -85,7 +85,8 @@ export default {
     return {
       sideNav: false,
       authSnackBar: false,
-      authErrorSnackBar: false
+      authErrorSnackBar: false,
+      badgeAnimated: false
     };
   },
   watch: {
@@ -101,6 +102,14 @@ export default {
       if(value !== null){
         this.authErrorSnackBar = true
       }
+    },
+    userFavorites(value){
+      if (value){
+        this.badgeAnimated = true;
+        setTimeout(()=>(
+          this.badgeAnimated = false
+        ), 1000)
+      }
     }
   },
   methods: {
@@ -112,7 +121,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["user", "authError"]),
+    ...mapGetters(["user", "authError", "userFavorites"]),
     horizontalNavItems() {
       let items = [
         {
@@ -204,5 +213,29 @@ i {
 .fade-leave-active {
 	opacity: 0;
 	transform: translateY(-25px);
+}
+
+.bounce {
+	animation: bounce 1s both;
+}
+
+@keyframes bounce {
+	0%,
+	20%,
+	53%,
+	80%,
+	100% {
+		transform: translate3d(0, 0, 0);
+	}
+	40%,
+	43% {
+		transform: translate3d(0, -20px, 0);
+	}
+	70% {
+		transform: translate3d(0, -10px, 0);
+	}
+	90% {
+		transform: translate3d(0, -4px, 0);
+	}
 }
 </style>
