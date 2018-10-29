@@ -3,8 +3,8 @@
         <!-- Post cards -->
         <v-layout row wrap v-if="infiniteScrollPosts">
             <v-flex xs12 sm6 v-for="post in infiniteScrollPosts.posts" :key="post._id">
-                <v-card hover @click.native="goToPost(post._id)">
-                    <v-img :src="post.imageUrl" height="30vh" lazy></v-img>
+                <v-card hover>
+                    <v-img :src="post.imageUrl" @click.native="goToPost(post._id)" height="30vh" lazy></v-img>
                     <v-card-actions>
                         <v-card-title primary>
                             <div>
