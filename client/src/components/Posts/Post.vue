@@ -44,10 +44,10 @@
     <div class="mt-3">
       <v-layout class="mb-3" v-if="user">
         <v-flex xs12>
-          <v-form @submit.prevent="handleAddPostMessage">
+          <v-form v-model="isFormValid" lazy-validation ref="form" @submit.prevent="handleAddPostMessage">
             <v-layout row>
               <v-flex xs12>
-                <v-text-field v-model="messageBody" @click:append-outer="handleAddPostMessage" clearable :append-outer-icon="messageBody && 'send'" label="Add Message" type="text" prepend-icon="email" requierd>
+                <v-text-field :rules="messageRules" v-model="messageBody" @click:append-outer="handleAddPostMessage" clearable :append-outer-icon="messageBody && 'send'" label="Add Message" type="text" prepend-icon="email" requierd>
                 </v-text-field>
               </v-flex>
             </v-layout>
@@ -78,7 +78,7 @@
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
                 <v-list-tile-action class="hidden-xs-only">
-                  <v-icon color="grey">chat_bubble</v-icon>
+                  <v-icon :color="checkIfOwnMessage(message) ? 'accent': 'greg'">chat_bubble</v-icon>
                 </v-list-tile-action>
               </v-list-tile>
             </template>
@@ -98,11 +98,18 @@ export default {
   data() {
     return{
       dialog: false,
-      messageBody: ""
+      messageBody: "",
+      isFormValid: true,
+      messageRules:[
+        message => !!message || "Message is required",
+        message => message.length < 100 || "Message must be less than 100 characters"
+        ]
+      
     }
   },
   methods: {
     handleAddPostMessage(){
+      if (this.$refs.form.validate()){
       const variables = {
         messageBody: this.messageBody,
         userId : this.user._id,
@@ -126,10 +133,13 @@ export default {
           })
         }
       }).then(({data}) =>{
+        // it could be this.messageBody = '' but since it is a form, iw wil be invalid after changing messageBody to empty string, so we must reset the form by the following
+        this.$refs.form.reset()
         console.log(data.addPostMessage)
       }).catch(err=>{
         console.log(err)
       })
+      }
     },
     goToPreviousPage(){
       this.$router.go(-1);
@@ -138,6 +148,9 @@ export default {
       if (window.innerWidth > 500){
         this.dialog = !this.dialog;
       }
+    },
+    checkIfOwnMessage(message){
+      return this.user && this.user._id && message.messageUser._id
     }
   },
   apollo: {
