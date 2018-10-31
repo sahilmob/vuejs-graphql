@@ -114,6 +114,23 @@ module.exports = {
 			});
 			return post.messages[0];
 		},
+		updateUserPost: async (
+			_,
+			{ userId, postId, title, imageUrl, description, categories },
+			{ Post }
+		) => {
+			const post = await Post.findOneAndUpdate(
+				{
+					_id: postId,
+					createdBy: userId
+				},
+				{
+					$set: { title, imageUrl, description, categories }
+				},
+				{ new: true }
+			);
+			return post;
+		},
 		likePost: async (_, { postId, username }, { Post, User }) => {
 			const post = await Post.findOneAndUpdate(
 				{ _id: postId },

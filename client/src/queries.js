@@ -175,6 +175,38 @@ export const UNLIKE_POST = gql`
 	}
 `;
 
+export const UPDATE_USER_POST = gql`
+	mutation(
+		$postId: ID!
+		$userId: ID!
+		$title: String!
+		$imageUrl: String!
+		$categories: [String]!
+		$description: String!
+	) {
+		updateUserPost(
+			userId: $userId
+			postId: $postId
+			title: $title
+			imageUrl: $imageUrl
+			description: $description
+			categories: $categories
+		) {
+			_id
+			title
+			description
+			categories
+			imageUrl
+			createdDate
+			likes
+			createdBy {
+				_id
+				avatar
+			}
+		}
+	}
+`;
+
 /* User Mutations */
 export const SIGNIN_USER = gql`
 	mutation($username: String!, $password: String!) {
