@@ -53,6 +53,10 @@ module.exports = {
 				return searchResult;
 			}
 		},
+		getUserPosts: async (_, { userId }, { Post }) => {
+			const posts = await Post.find({ createdBy: userId });
+			return posts;
+		},
 		infiniteScrollPosts: async (_, { pageNum, pageSize }, { Post }) => {
 			let posts;
 			if (pageNum === 1) {
