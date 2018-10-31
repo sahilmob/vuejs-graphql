@@ -39,7 +39,7 @@
                 <h2 class="font-weight-light">
                     Favorited:
                     <span class="font-weight-regular">
-                        {{userFavorites.length}}
+                        ({{userFavorites.length}})
                     </span>
                 </h2>
             </v-flex>
@@ -50,6 +50,37 @@
                         <v-card-text>
                             {{favorite.title}}
                         </v-card-text>
+                    </v-card>
+                </v-flex>
+            </v-layout>
+        </v-container>
+        <!-- Posts created by user -->
+        <v-container v-if="!userPosts.length">
+            <v-layout row wrap>
+                <v-flex xs12>
+                    <h2>You have no posts currently. Go and add some!</h2>
+                </v-flex>
+            </v-layout>
+        </v-container>
+        <v-container class="mt-3" v-else>
+            <v-flex xs12>
+                <h2 class="font-weight-light">
+                    Your Posts
+                    <span class="font-weight-regular">({{userPosts.length}})</span>
+                </h2>
+            </v-flex>
+            <v-layout row wrap>
+                <v-flex xs12 sm6 v-for="post in userPosts" :key="post._id">
+                    <v-card class="mt-3 ml-1 mr-2" hover>
+                        <v-btn color="info" floating fab small dark>
+                            <v-icon>edit</v-icon>
+                        </v-btn>
+                        <v-btn color="error" floating fab small dark>
+                            <v-icon>delete</v-icon>
+                        </v-btn>
+                        <v-img height="30vh" :src="post.imageUrl">
+
+                        </v-img>
                     </v-card>
                 </v-flex>
             </v-layout>
