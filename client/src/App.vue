@@ -34,6 +34,19 @@
       </v-toolbar-title>
       <v-spacer></v-spacer>
       <v-text-field v-model="searchTerm" @input="handleSearchPosts" flex prepend-icon="search" placeholder="Search posts" color="accent" single-line hide-details></v-text-field>
+      <!-- Search result card -->
+      <v-card dark v-if="searchResults.length" id="search__card">
+        <v-list>
+          <v-list-tile v-for="result in searchResults" :key="result._id">
+            <v-list-tile-title>
+              {{result.title}}
+              <span class="font-weight-thin">
+                {{result.description}}
+              </span>
+            </v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-card>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
         <v-btn flat v-for="item in horizontalNavItems" :key="item.title" :to="item.link">
@@ -127,7 +140,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(["user", "authError", "userFavorites"]),
+    ...mapGetters(["user", "authError", "userFavorites", "searchResults"]),
     horizontalNavItems() {
       let items = [
         {
@@ -219,6 +232,14 @@ i {
 .fade-leave-active {
 	opacity: 0;
 	transform: translateY(-25px);
+}
+
+#search__card {
+	position: absolute;
+	width: 100vw;
+	z-index: 10;
+	top: 100%;
+	left: 0;
 }
 
 .bounce {

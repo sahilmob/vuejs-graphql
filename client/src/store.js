@@ -10,13 +10,13 @@ import {
 	ADD_POST,
 	SEARCH_POST
 } from "./queries";
-import { check } from "graphql-anywhere";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
 	state: {
 		posts: [],
+		searchResults: [],
 		user: null,
 		loading: false,
 		error: null,
@@ -25,6 +25,11 @@ export default new Vuex.Store({
 	mutations: {
 		setPosts: (state, posts) => {
 			state.posts = posts;
+		},
+		setSearchResults: (state, payload) => {
+			if (payload !== null) {
+				state.searchResults = payload;
+			}
 		},
 		setLoading: (state, payload) => {
 			state.loading = payload;
@@ -121,8 +126,7 @@ export default new Vuex.Store({
 					variables: payload
 				})
 				.then(({ data }) => {
-					// commit('', posts)
-					console.log(data.searchPost);
+					commit("setSearchResults", data.searchPost);
 				})
 				.catch(err => {
 					console.log(err);
@@ -179,6 +183,9 @@ export default new Vuex.Store({
 	getters: {
 		posts: state => {
 			return state.posts;
+		},
+		searchResults: state => {
+			return state.searchResults;
 		},
 		loading: state => {
 			return state.loading;
