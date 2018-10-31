@@ -33,7 +33,7 @@
         </router-link>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-text-field flex prepend-icon="search" placeholder="Search posts" color="accent" single-line hide-details></v-text-field>
+      <v-text-field v-model="searchTerm" @input="handleSearchPosts" flex prepend-icon="search" placeholder="Search posts" color="accent" single-line hide-details></v-text-field>
       <v-spacer></v-spacer>
       <v-toolbar-items class="hidden-xs-only">
         <v-btn flat v-for="item in horizontalNavItems" :key="item.title" :to="item.link">
@@ -83,6 +83,7 @@ export default {
   name: "App",
   data() {
     return {
+      searchTerm: '',
       sideNav: false,
       authSnackBar: false,
       authErrorSnackBar: false,
@@ -113,6 +114,11 @@ export default {
     }
   },
   methods: {
+    handleSearchPosts(){
+      this.$store.dispatch('searchPost', {
+        searchTerm: this.searchTerm
+      })
+    },
     handleSignOut() {
       this.$store.dispatch("signoutUser");
     },

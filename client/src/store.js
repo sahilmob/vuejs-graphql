@@ -7,7 +7,8 @@ import {
 	GET_POSTS,
 	SIGNIN_USER,
 	SIGNUP_USER,
-	ADD_POST
+	ADD_POST,
+	SEARCH_POST
 } from "./queries";
 import { check } from "graphql-anywhere";
 
@@ -110,6 +111,20 @@ export default new Vuex.Store({
 				})
 				.catch(err => {
 					commit("setLoading", false);
+					console.log(err);
+				});
+		},
+		searchPost: ({ commit }, payload) => {
+			apolloClient
+				.query({
+					query: SEARCH_POST,
+					variables: payload
+				})
+				.then(({ data }) => {
+					// commit('', posts)
+					console.log(data.searchPost);
+				})
+				.catch(err => {
 					console.log(err);
 				});
 		},
