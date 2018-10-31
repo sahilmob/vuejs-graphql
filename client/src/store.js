@@ -8,7 +8,8 @@ import {
 	SIGNIN_USER,
 	SIGNUP_USER,
 	ADD_POST,
-	SEARCH_POST
+	SEARCH_POST,
+	GET_USER_POSTS
 } from "./queries";
 
 Vue.use(Vuex);
@@ -18,6 +19,7 @@ export default new Vuex.Store({
 		posts: [],
 		searchResults: [],
 		user: null,
+		userPosts: [],
 		loading: false,
 		error: null,
 		authError: null
@@ -36,6 +38,9 @@ export default new Vuex.Store({
 		},
 		setUser: (state, user) => {
 			state.user = user;
+		},
+		setUserPosts: (state, payload) => {
+			state.userPosts = payload;
 		},
 		setAuthError: (state, payload) => {
 			state.authError = payload;
@@ -135,6 +140,19 @@ export default new Vuex.Store({
 					console.log(err);
 				});
 		},
+		getUserPosts: ({ commit }, payload) => {
+			apolloClient
+				.query({
+					query: GET_USER_POSTS,
+					variables: payload
+				})
+				.then(({ data }) => {
+					commit("setUserPosts", data.getUserPosts);
+				})
+				.catch(err => {
+					console.log(err);
+				});
+		},
 		signinUser: ({ commit }, payload) => {
 			//the below line is to set the token to an empty string before signin muatation to prevent any errors(if malformed token)
 			commit("clearError");
@@ -198,6 +216,9 @@ export default new Vuex.Store({
 		},
 		userFavorites: state => {
 			return state.user && state.user.favorites;
+		},
+		userPosts: state => {
+			return state.userPosts;
 		},
 		error: state => {
 			return state.error;

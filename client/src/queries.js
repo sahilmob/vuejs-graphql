@@ -61,7 +61,7 @@ export const INFINITE_SCROLL_POSTS = gql`
 `;
 
 export const GET_USER_POSTS = gql`
-	query($userId: ID) {
+	query($userId: ID!) {
 		getUserPosts(userId: $userId) {
 			_id
 			title
