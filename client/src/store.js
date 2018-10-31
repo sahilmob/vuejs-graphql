@@ -48,6 +48,9 @@ export default new Vuex.Store({
 		},
 		clearError: state => {
 			state.error = null;
+		},
+		clearSearchResults: state => {
+			state.searchResults = [];
 		}
 	},
 	actions: {
