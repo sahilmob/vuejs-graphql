@@ -72,15 +72,16 @@
             <v-layout row wrap>
                 <v-flex xs12 sm6 v-for="post in userPosts" :key="post._id">
                     <v-card class="mt-3 ml-1 mr-2" hover>
-                        <v-btn @click="editPostDialog = true" color="info" floating fab small dark>
+                        <v-btn @click="loadPost(post)" color="info" floating fab small dark>
                             <v-icon>edit</v-icon>
                         </v-btn>
                         <v-btn color="error" floating fab small dark>
                             <v-icon>delete</v-icon>
                         </v-btn>
-                        <v-img height="30vh" :src="post.imageUrl">
-
-                        </v-img>
+                        <v-img height="30vh" :src="post.imageUrl"></v-img>
+                        <v-card-text>
+                            {{post.title}}
+                        </v-card-text>
                     </v-card>
                 </v-flex>
             </v-layout>
@@ -122,11 +123,11 @@
                             </v-flex>
                         </v-layout>
                         <v-divider></v-divider>
-                        <v-card-action>
+                        <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn type="submit" class="success--text" flat>Update</v-btn>
+                            <v-btn :disabled="!isFormValid" type="submit" class="success--text" flat>Update</v-btn>
                             <v-btn class="error--text" flat @click="editPostDialog = false">Cancle</v-btn>
-                        </v-card-action>
+                        </v-card-actions>
                     </v-form>
                 </v-container>
             </v-card>
@@ -175,7 +176,25 @@ export default {
           });
       },
       handleUpdateUserPost(){
-
+          if (this.$refs.form.validate()){
+            this.editPostDialog = false;
+              this.$store.dispatch('updateUserPost', {
+                  postId: this.postId,
+                  userId: this.user._id,
+                  title: this.title,
+                  imageUrl: this.imageUrl,
+                  categories: this.categories,
+                  description: this.description
+              })
+          }
+      },
+      loadPost({_id, title, imageUrl, categories, description}, editPostDialog = true){
+          this.editPostDialog= editPostDialog
+          this.postId= _id;
+          this.title = title;
+          this.imageUrl = imageUrl;
+          this.categories = categories;
+          this.description = description;
       }
   }
 };
