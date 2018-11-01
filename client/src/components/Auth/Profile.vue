@@ -14,7 +14,7 @@
                                     {{user.username}}
                                 </div>
                                 <div>
-                                    Joined {{user.joinDate}}
+                                    Joined {{user.joinDate | formatDate}}
                                 </div>
                                 <div class="hidden-xs-only font-weight-thin">{{user.favorites.length}} Favorites</div>
                                 <div class="hidden-xs-only font-weight-thin">{{userPosts.length}} Posts Added</div>
@@ -136,6 +136,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import { mapGetters} from 'vuex';
 export default {
   name: "Profile",
@@ -204,6 +205,11 @@ export default {
                   postId: this.postId
               })
           }
+      }
+  },
+    filters: {
+      formatDate: (date) =>{
+          return moment(new Date(date)).format('ll');
       }
   }
 };

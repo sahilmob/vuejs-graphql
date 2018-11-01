@@ -73,7 +73,7 @@
                   <v-list-tile-sub-title>
                     {{message.messageUser.username}}
                     <span class="grey--text text-lighten-1 hidden-xs-only">
-                      {{message.messageDate}}
+                      {{message.messageDate | formatDate}}
                     </span>
                   </v-list-tile-sub-title>
                 </v-list-tile-content>
@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import {mapGetters} from 'vuex'
 import {GET_POST, ADD_POST_MESSAGE, GET_POSTS, LIKE_POST, UNLIKE_POST} from '../../queries'
 export default {
@@ -241,6 +242,11 @@ export default {
   },
   computed:{
     ...mapGetters(['user', 'userFavorites'])
+  },
+    filters: {
+      formatDate: (date) =>{
+          return moment(new Date(date)).fromNow();
+      }
   }
 }
 </script>

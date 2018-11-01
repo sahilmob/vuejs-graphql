@@ -31,7 +31,7 @@
                                         {{post.createdBy.username}}
                                     </v-list-tile-title>
                                     <v-list-tile-title class="font-weight-thin">
-                                        Added {{post.createdDate}}
+                                        Added {{post.createdDate | formatDate}}
                                     </v-list-tile-title>
                                 </v-list-tile-content>
                                 <v-list-tile-action>
@@ -59,6 +59,7 @@
 </template>
 
 <script>
+import moment from 'moment'
 import {INFINITE_SCROLL_POSTS} from '../../queries'
 const pageSize = 2
 
@@ -69,6 +70,11 @@ export default {
           pageNum: 1,
           showMoreEnabled: true,
           showPostCreator: true
+      }
+  },
+  filters: {
+      formatDate: (date) =>{
+          return moment(new Date(date)).format('ll');
       }
   },
   apollo:{
