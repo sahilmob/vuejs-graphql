@@ -207,6 +207,14 @@ export const UPDATE_USER_POST = gql`
 	}
 `;
 
+export const DELETE_USER_POST = gql`
+	mutation($postId: ID!) {
+		deleteUserPost(postId: $postId) {
+			_id
+		}
+	}
+`;
+
 /* User Mutations */
 export const SIGNIN_USER = gql`
 	mutation($username: String!, $password: String!) {

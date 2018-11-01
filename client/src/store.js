@@ -10,7 +10,8 @@ import {
 	ADD_POST,
 	SEARCH_POST,
 	GET_USER_POSTS,
-	UPDATE_USER_POST
+	UPDATE_USER_POST,
+	DELETE_USER_POST
 } from "./queries";
 
 Vue.use(Vuex);
@@ -150,6 +151,24 @@ export default new Vuex.Store({
 					console.log(err);
 				});
 		},
+		deleteUserPost: ({ state, commit }, payload) => {
+			apolloClient
+				.mutate({
+					mutation: DELETE_USER_POST,
+					variables: payload
+				})
+				.then(({ data }) => {
+					const index = state.userPosts.findIndex(
+						post => post._id === data.deleteUserPost._id
+					);
+					//[...userposts up to but not including index, updated post, ...all elements after index up to the end]
+					const userPosts = [
+						...state.userPosts.slice(0, index),
+						...state.userPosts.slice(index + 1)
+					];
+					commit("setUserPosts", userPosts);
+				});
+		},
 		searchPost: ({ commit }, payload) => {
 			apolloClient
 				.query({
@@ -158,6 +177,9 @@ export default new Vuex.Store({
 				})
 				.then(({ data }) => {
 					commit("setSearchResults", data.searchPost);
+				})
+				.catch(err => {
+					console.log(err);
 				})
 				.catch(err => {
 					console.log(err);

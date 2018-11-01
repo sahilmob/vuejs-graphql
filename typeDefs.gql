@@ -67,6 +67,7 @@ type Mutation {
 		categories: [String]!
 		description: String!
 	): Post!
+	deleteUserPost(postId: ID): Post!
 	signupUser(username: String!, email: String!, password: String!): Token!
 	signinUser(username: String!, password: String!): Token!
 	addPostMessage(messageBody: String!, userId: ID!, postId: ID!): Message!
