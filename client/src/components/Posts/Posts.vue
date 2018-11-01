@@ -68,7 +68,7 @@ export default {
   data(){
       return{
           pageNum: 1,
-          showMoreEnabled: true,
+        //   showMoreEnabled: true,
           showPostCreator: true
       }
   },
@@ -86,6 +86,11 @@ export default {
           }
       }
   },
+  computed:{
+      showMoreEnabled(){
+          return this.infiniteScrollPosts && this.infiniteScrollPosts.hasMore
+      }
+  },
   methods:{
       showMorePosts(){
           this.pageNum +=1;
@@ -99,7 +104,7 @@ export default {
                   console.log(fetchMoreResult)
                   const newPosts = fetchMoreResult.infiniteScrollPosts.posts;
                   const hasMore = fetchMoreResult.infiniteScrollPosts.hasMore;
-                  this.showMoreEnabled = hasMore;
+                //   this.showMoreEnabled = hasMore;
 
                   return{
                       infiniteScrollPosts: {
