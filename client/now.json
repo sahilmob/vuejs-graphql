@@ -1,0 +1,17 @@
+{
+  "name": "vuw-share226699",
+  "type": "static",
+  "static": {
+    "public": "dist",
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  },
+  "alias": "share226699",
+  "files": [
+    "dist"
+  ]
+}

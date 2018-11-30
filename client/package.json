@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"serve": "vue-cli-service serve",
+		"deploy": "npm run build && now --public && now alias",
 		"build": "vue-cli-service build"
 	},
 	"dependencies": {

@@ -16,7 +16,7 @@ Vue.component("form-alert", FormAlert);
 Vue.use(VueApollo);
 
 export const defaultClient = new ApolloClient({
-	uri: "http://localhost:4000/graphql",
+	uri: "https://fullstack-vue-graphql-fodjsrudon.now.sh/graphql",
 	fetchOptions: {
 		credentials: "include"
 	},
